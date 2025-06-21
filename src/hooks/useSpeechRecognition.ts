@@ -46,9 +46,12 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const part = event.results[i][0].transcript;
-        event.results[i].isFinal
-          ? (finalTranscript += part + ' ')
-          : (interimTranscript += part);
+        if (event.results[i].isFinal) {
+            finalTranscript += part + ' ';
+          } else {
+            interimTranscript += part;
+          }
+
       }
 
       setTranscript(finalTranscript + interimTranscript);
