@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
+// Define the types for the hook return
 interface SpeechRecognitionHook {
   isListening: boolean;
   transcript: string;
@@ -9,20 +10,32 @@ interface SpeechRecognitionHook {
   isSupported: boolean;
 }
 
+// Extend global types for SpeechRecognition
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
 export function useSpeechRecognition(): SpeechRecognitionHook {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
 
-  const isSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  const isSupported =
+    typeof window !== 'undefined' &&
+    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   useEffect(() => {
     if (!isSupported) return;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
+    const SpeechRecognitionConstructor =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    recognitionRef.current = new SpeechRecognitionConstructor();
     const recognition = recognitionRef.current;
+
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
@@ -31,7 +44,7 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
       setIsListening(true);
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       let finalTranscript = '';
       let interimTranscript = '';
 
@@ -47,7 +60,7 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
       setTranscript(finalTranscript + interimTranscript);
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
     };
@@ -57,9 +70,7 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
     };
 
     return () => {
-      if (recognition) {
-        recognition.stop();
-      }
+      recognition.stop();
     };
   }, [isSupported]);
 
@@ -87,12 +98,4 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
     resetTranscript,
     isSupported,
   };
-}
-
-// Extend Window interface for TypeScript
-declare global {
-  interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
-  }
 }

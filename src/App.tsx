@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import './App.css';
 
+
 function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
