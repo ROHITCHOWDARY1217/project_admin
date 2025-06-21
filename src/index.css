@@ -1,0 +1,357 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Fix button hover issue in light mode */
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+  
+  .btn-outline {
+    @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+  }
+  
+  .btn-ghost {
+    @apply hover:bg-accent hover:text-accent-foreground;
+  }
+}
+
+/* Enhanced button hover fixes for light mode */
+.light button:hover {
+  @apply transition-colors duration-200;
+}
+
+.light button[data-variant="default"]:hover,
+.light .bg-primary:hover {
+  @apply bg-gray-800 text-white;
+}
+
+.light button[data-variant="outline"]:hover {
+  @apply bg-gray-50 text-gray-900 border-gray-300;
+}
+
+.light button[data-variant="ghost"]:hover {
+  @apply bg-gray-100 text-gray-900;
+}
+
+.light button[data-variant="secondary"]:hover {
+  @apply bg-gray-200 text-gray-900;
+}
+
+/* Ensure proper contrast in light mode */
+.light .bg-primary {
+  @apply bg-gray-900;
+}
+
+.light .text-primary-foreground {
+  @apply text-white;
+}
+
+.light .hover\:bg-primary\/90:hover {
+  @apply bg-gray-800;
+}
+
+/* Responsive optimizations */
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .grid {
+    @apply gap-3;
+  }
+  
+  .space-y-6 > * + * {
+    @apply mt-4;
+  }
+}
+
+/* Loading animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .loading-shimmer {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200px 100%;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Improved focus states */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
+}
+
+/* Better scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Enhanced AI Assistant Structured Content Styling */
+.structured-content {
+  @apply leading-relaxed;
+}
+
+.structured-content h1 {
+  @apply text-lg font-bold text-blue-600 dark:text-blue-400 mb-3 pb-2 border-b border-blue-200 dark:border-blue-800;
+}
+
+.structured-content h2 {
+  @apply text-base font-semibold text-gray-800 dark:text-gray-200 mt-4 mb-2;
+}
+
+.structured-content h3 {
+  @apply text-sm font-medium text-gray-700 dark:text-gray-300 mt-3 mb-1;
+}
+
+.structured-content p {
+  @apply mb-2;
+}
+
+.structured-content strong {
+  @apply font-semibold text-gray-900 dark:text-gray-100;
+}
+
+/* Status indicators */
+.structured-content:contains("🔴") {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.structured-content:contains("🟡") {
+  @apply text-yellow-600 dark:text-yellow-400;
+}
+
+.structured-content:contains("🟢") {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.structured-content:contains("✅") {
+  @apply text-green-700 dark:text-green-300;
+}
+
+.structured-content:contains("⏳") {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+/* Action items styling */
+.structured-content:contains("💡") {
+  @apply bg-blue-50 dark:bg-blue-900/20 p-2 rounded border-l-4 border-blue-400;
+}
+
+/* Department and location styling */
+.structured-content:contains("🏢") {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
+.structured-content:contains("📍") {
+  @apply text-indigo-600 dark:text-indigo-400;
+}
+
+/* Monetary values */
+.structured-content:contains("💰") {
+  @apply text-green-600 dark:text-green-400 font-medium;
+}
+
+/* Separator line styling */
+.structured-content hr {
+  @apply border-gray-300 dark:border-gray-600 my-3;
+}
+
+/* Code and monospace text */
+.structured-content code {
+  @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-xs font-mono;
+}
+
+/* Lists and bullet points */
+.structured-content ul {
+  @apply space-y-1 ml-4;
+}
+
+.structured-content li {
+  @apply text-sm;
+}
+
+/* Responsive text sizing for structured content */
+@media (max-width: 768px) {
+  .structured-content h1 {
+    @apply text-base;
+  }
+  
+  .structured-content h2 {
+    @apply text-sm;
+  }
+  
+  .structured-content h3 {
+    @apply text-xs;
+  }
+}
+
+/* Enhanced message bubble styling for AI responses */
+.structured-content {
+  @apply max-w-none;
+}
+
+/* Ensure proper spacing in structured responses */
+.structured-content > * + * {
+  @apply mt-2;
+}
+
+.structured-content h1 + * {
+  @apply mt-3;
+}
+
+.structured-content h2 + * {
+  @apply mt-2;
+}
+
+.structured-content h3 + * {
+  @apply mt-1;
+}
