@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-// Define the types for the hook return
+// Define the return structure of the hook
 interface SpeechRecognitionHook {
   isListening: boolean;
   transcript: string;
@@ -10,7 +10,7 @@ interface SpeechRecognitionHook {
   isSupported: boolean;
 }
 
-// Extend global types for SpeechRecognition
+// Declare global types to avoid TS issues
 declare global {
   interface Window {
     SpeechRecognition: any;
@@ -25,36 +25,30 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
 
   const isSupported =
     typeof window !== 'undefined' &&
-    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+    ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
 
   useEffect(() => {
     if (!isSupported) return;
 
-    const SpeechRecognitionConstructor =
+    const RecognitionConstructor =
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    recognitionRef.current = new SpeechRecognitionConstructor();
-    const recognition = recognitionRef.current;
-
+    const recognition = new RecognitionConstructor();
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
-    recognition.onstart = () => {
-      setIsListening(true);
-    };
+    recognition.onstart = () => setIsListening(true);
 
     recognition.onresult = (event: any) => {
       let finalTranscript = '';
       let interimTranscript = '';
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcriptPart = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcriptPart + ' ';
-        } else {
-          interimTranscript += transcriptPart;
-        }
+        const part = event.results[i][0].transcript;
+        event.results[i].isFinal
+          ? (finalTranscript += part + ' ')
+          : (interimTranscript += part);
       }
 
       setTranscript(finalTranscript + interimTranscript);
@@ -68,6 +62,8 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
     recognition.onend = () => {
       setIsListening(false);
     };
+
+    recognitionRef.current = recognition;
 
     return () => {
       recognition.stop();
@@ -86,9 +82,7 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
     }
   };
 
-  const resetTranscript = () => {
-    setTranscript('');
-  };
+  const resetTranscript = () => setTranscript('');
 
   return {
     isListening,
